@@ -1,6 +1,6 @@
 {
-  "name": "Clock",
-  "short_name": "Clock", 
+  "name": "Relógio",
+  "short_name": "Relógio", 
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "portrait",
@@ -21,3 +21,4 @@
     }
   ]
 }
+
