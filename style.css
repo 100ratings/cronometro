@@ -250,17 +250,17 @@ span[id^="icon-"] {
     margin-bottom: 2px;
 }
 
-/* ICONS — robusto para URL externa via CSS var */
+/* ICONS — compatível com iOS (var guarda o url(...)) */
 .nav-icon {
-    background-color: currentColor;
-    -webkit-mask-image: url(var(--icon-url));
-            mask-image: url(var(--icon-url));
-    -webkit-mask-size: contain;
-            mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-            mask-position: center;
+  background-color: currentColor;
+  -webkit-mask-image: var(--icon-mask);
+          mask-image: var(--icon-mask);
+  -webkit-mask-size: contain;
+          mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+          mask-position: center;
 }
 
 #icon-world-clock {
@@ -350,3 +350,4 @@ span[id^="icon-"] {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
+
