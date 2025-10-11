@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startStopBtn.textContent = 'Iniciar';
         startStopBtn.classList.remove('stop');
         startStopBtn.classList.add('start');
-        resetLapBtn.textContent = 'Redefinir';
+        resetLapBtn.textContent = 'Zerar';
         // permanece habilitado
     }
 
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         startStopBtn.textContent = 'Iniciar';
         startStopBtn.classList.remove('stop');
         startStopBtn.classList.add('start');
-        resetLapBtn.textContent = 'Redefinir';
+        resetLapBtn.textContent = 'Zerar';
         resetLapBtn.disabled = true;
     }
 
@@ -171,3 +171,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 }); // End DOMContentLoaded
+
