@@ -1,47 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
     const worldClockIcon = document.getElementById('icon-world-clock');
-    // --- Get DOM Elements ---
+    // --- Elementos do DOM ---
     const timeDisplay = document.getElementById('timeDisplay');
-    // lapTimeDisplay is inside the .laps container, find it there
     const lapsContainer = document.querySelector('.laps');
-    const lapTimeDisplay = document.getElementById('lapTimeDisplay'); // Assuming this ID exists within .laps
+    const lapTimeDisplay = document.getElementById('lapTimeDisplay');
     const startStopBtn = document.getElementById('startStopBtn');
     const resetLapBtn = document.getElementById('resetLapBtn');
 
-     // Function to check if the user is on an Android device
-    const isAndroid = () => {
-        return /Android/i.test(navigator.userAgent);
-    };
+    // Detecta Android
+    const isAndroid = () => /Android/i.test(navigator.userAgent);
 
-    // Toggle fullscreen function
+    // Fullscreen (aciona no ícone do relógio mundial, apenas Android)
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
+            if (document.exitFullscreen) document.exitFullscreen();
         }
     };
 
-    // Add click event listener to the world clock icon
     if (worldClockIcon) {
         worldClockIcon.addEventListener('click', () => {
-            if (isAndroid()) {
-                toggleFullScreen();
-            }
+            if (isAndroid()) toggleFullScreen();
         });
     }
 
-    // --- State Variables ---
+    // --- Estado ---
     let startTime = 0;
     let elapsedTime = 0;
     let timerInterval = null;
     let isRunning = false;
 
-    // --- Helper Functions ---
-
-    // Gets individual time components (MM, SS, HH)
+    // --- Helpers ---
     function getTimeParts(time) {
         const totalMilliseconds = Math.max(0, time);
         const hundredths = String(Math.floor((totalMilliseconds % 1000) / 10)).padStart(2, '0');
@@ -50,83 +40,60 @@ document.addEventListener('DOMContentLoaded', () => {
         return { minutes, seconds, hundredths };
     }
 
-    // Updates the time displays using spans for styling separators
     function updateDisplay(displayTime) {
         const parts = getTimeParts(displayTime);
-        const newHTML = `
-            <span class="time-part minutes">${parts.minutes}</span><span class="time-part colon">:</span><span class="time-part seconds">${parts.seconds}</span><span class="time-part dot">.</span><span class="time-part hundredths">${parts.hundredths}</span>
-        `; // Kept on one line to avoid extra whitespace between spans
-
+        const newHTML = `<span class="time-part minutes">${parts.minutes}</span><span class="time-part colon">:</span><span class="time-part seconds">${parts.seconds}</span><span class="time-part dot">.</span><span class="time-part hundredths">${parts.hundredths}</span>`;
         timeDisplay.innerHTML = newHTML;
 
-        // Update Lap 1 display similarly if laps are visible and element exists
+        // Atualiza a “Volta 1” se visível
         if (lapsContainer.style.display !== 'none' && lapTimeDisplay) {
-                 lapTimeDisplay.innerHTML = newHTML; // Use same structure
+            lapTimeDisplay.innerHTML = newHTML;
         }
     }
 
-    // Snaps the time so that the entire number (MMSSCC) is divisible by 9
+    // Ajuste para que MMSSCC seja múltiplo de 9
     function snapToNearestMultipleOfNine(timeInMillis) {
-        // Convert minutes, seconds, and centiseconds into a single number
         const minutes = Math.floor((timeInMillis / (1000 * 60)) % 60);
         const seconds = Math.floor((timeInMillis / 1000) % 60);
         const centiseconds = Math.floor((timeInMillis % 1000) / 10);
-        
-        // Create the complete number (MMSSCC)
-        // For example, 01:23.45 becomes 12345
         const completeNumber = minutes * 10000 + seconds * 100 + centiseconds;
-        
-        // Find the nearest multiple of 9
+
         const remainder = completeNumber % 9;
         let targetNumber;
-
         if (remainder === 0) {
             targetNumber = completeNumber;
         } else if (remainder <= 4) {
-            targetNumber = completeNumber - remainder; // Round down
+            targetNumber = completeNumber - remainder; // arredonda p/ baixo
         } else {
-            targetNumber = completeNumber + (9 - remainder); // Round up
+            targetNumber = completeNumber + (9 - remainder); // arredonda p/ cima
         }
+        if (targetNumber === 0) targetNumber = 9;
 
-        // If we ended up with 0, use the first positive multiple of 9 (9)
-        if (targetNumber === 0) {
-            targetNumber = 9;
-        }
-        
-        // Convert back to individual components
         const targetMinutes = Math.floor(targetNumber / 10000);
         const targetSeconds = Math.floor((targetNumber % 10000) / 100);
         const targetCentiseconds = targetNumber % 100;
-        
-        // Convert back to milliseconds
-        const adjustedMillis = (targetMinutes * 60 * 1000) + 
-                             (targetSeconds * 1000) + 
-                             (targetCentiseconds * 10);
-        
-        return adjustedMillis;
+
+        return (targetMinutes * 60000) + (targetSeconds * 1000) + (targetCentiseconds * 10);
     }
 
-    // --- Core Timer Functions ---
-
+    // --- Núcleo ---
     function startTimer() {
         if (isRunning) return;
         isRunning = true;
-        // Resume from previously elapsed time if any
         startTime = Date.now() - elapsedTime;
 
-        lapsContainer.style.display = 'block'; // Show laps container
+        lapsContainer.style.display = 'block';
 
         timerInterval = setInterval(() => {
-            // No need to store elapsed time continuously, calculate fresh
             const currentElapsedTime = Date.now() - startTime;
             updateDisplay(currentElapsedTime);
-        }, 10); // Update every 10ms for hundredths display
+        }, 10);
 
-        // Update button appearance and state
-        startStopBtn.textContent = 'Stop';
+        // rótulos pt-BR
+        startStopBtn.textContent = 'Parar';
         startStopBtn.classList.remove('start');
         startStopBtn.classList.add('stop');
-        resetLapBtn.textContent = 'Lap';
+        resetLapBtn.textContent = 'Volta';
         resetLapBtn.disabled = false;
     }
 
@@ -136,90 +103,70 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(timerInterval);
         timerInterval = null;
 
-        // Calculate final raw time at the moment stop was pressed
         const finalRawElapsedTime = Date.now() - startTime;
-
-        // Snap the time according to the rules
-        let snappedElapsedTime = snapToNearestMultipleOfNine(finalRawElapsedTime);
-
-        // Store final stopped time
+        const snappedElapsedTime = snapToNearestMultipleOfNine(finalRawElapsedTime);
         elapsedTime = snappedElapsedTime;
 
-        // Update display with final snapped time
         updateDisplay(elapsedTime);
 
-        // Update button appearance and state
-        startStopBtn.textContent = 'Start';
+        // rótulos pt-BR
+        startStopBtn.textContent = 'Iniciar';
         startStopBtn.classList.remove('stop');
         startStopBtn.classList.add('start');
-        resetLapBtn.textContent = 'Reset';
-        // Reset button remains enabled after stopping
+        resetLapBtn.textContent = 'Redefinir';
+        // permanece habilitado
     }
 
     function resetTimer() {
-        // Stop the timer if it's running
         if (isRunning) {
-             clearInterval(timerInterval);
-             timerInterval = null;
-             isRunning = false;
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isRunning = false;
         }
 
-        // Reset time variables
         elapsedTime = 0;
-        startTime = 0; // Reset start anchor
+        startTime = 0;
 
-        // Update display to zero using the span structure
         updateDisplay(elapsedTime);
-
-        // Hide the laps container
         lapsContainer.style.display = 'none';
 
-        // Reset button appearance and state
-        startStopBtn.textContent = 'Start';
+        // rótulos pt-BR
+        startStopBtn.textContent = 'Iniciar';
         startStopBtn.classList.remove('stop');
         startStopBtn.classList.add('start');
-        resetLapBtn.textContent = 'Reset';
-        resetLapBtn.disabled = true; // Disable Reset when at zero
+        resetLapBtn.textContent = 'Redefinir';
+        resetLapBtn.disabled = true;
     }
 
-    // --- Event Listeners ---
+    // --- Eventos ---
     startStopBtn.addEventListener('click', () => {
-        if (isRunning) {
-            stopTimer();
-        } else {
-            startTimer();
-        }
+        if (isRunning) { stopTimer(); } else { startTimer(); }
     });
 
     resetLapBtn.addEventListener('click', () => {
         if (isRunning) {
-            // --- Lap Functionality Placeholder ---
-            console.log('Lap button pressed - Lap functionality not implemented.');
-            // const currentLapTime = Date.now() - startTime;
-            // 1. Record currentLapTime (maybe adjusted based on last lap time)
-            // 2. Create a new lap entry element in the lapsContainer
-            // 3. Update the main lap display (Lap X) if needed
-            // --- End Placeholder ---
+            // Placeholder de Volta (não implementado)
+            console.log('Botão Volta pressionado — funcionalidade de volta não implementada.');
         } else {
-            // Reset functionality
             resetTimer();
         }
     });
 
-    // --- Initial Setup on Page Load ---
-    lapsContainer.style.display = 'none'; // Ensure laps are hidden initially
-    resetLapBtn.disabled = true;          // Reset button starts disabled
-    updateDisplay(0);                     // Initialize display to 00:00.00 with spans
+    // --- Inicialização ---
+    lapsContainer.style.display = 'none';
+    resetLapBtn.disabled = true;
+    updateDisplay(0);
 
-    // --- PWA Service Worker Registration ---
+    // --- PWA: Service Worker ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js') // Ensure path is correct relative to index.html
+            // Use caminho relativo (GitHub Pages): ./sw.js
+            navigator.serviceWorker.register('./sw.js')
                 .then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    console.log('ServiceWorker registrado com escopo:', registration.scope);
                 })
                 .catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
+                    console.log('Falha ao registrar ServiceWorker:', err);
                 });
         });
     }
