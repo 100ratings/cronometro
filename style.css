@@ -1,24 +1,379 @@
-{
-  "name": "Cronômetro",
-  "short_name": "Cronômetro",
-  "lang": "pt-BR",
-  "start_url": "./index.html",
-  "display": "fullscreen",
-  "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "icons": [
-    {
-      "src": "./icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+/* Basic Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html {
+    height: 100%;
+    height: -webkit-fill-available;
+    overflow: hidden;
+    background-color: #000;
+}
+
+body {
+    height: 100%;
+    height: -webkit-fill-available;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    margin: 0;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+    overflow: hidden;
+    background-color: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Main Stopwatch Container */
+.stopwatch-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    padding-top: max(16px, env(safe-area-inset-top));
+}
+
+/* Time Display */
+.time-display {
+    font-size: clamp(4.8rem, 23vw, 7.5rem);
+    font-weight: 100;
+    text-align: center;
+    letter-spacing: -0.019em;
+    padding: 0;
+    margin-top: min(25vh, 17vh);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style individual time parts */
+.time-part {
+    display: inline-block;
+    line-height: 1;
+}
+
+/* Style the separators specifically */
+.colon,
+.dot {
+    margin-left: 0.035em;
+    margin-right: 0.04em;
+    /* Adjust bottom margin if needed for perfect vertical alignment */
+    margin-bottom: 0.17em; /* User specified margin */
+     /* Keep separators light */
+    font-weight: 100; /* Match main display weight */
+}
+
+/* Controls (Buttons) */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5vw;
+    margin-top: 9.5vh;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+.control-button {
+    width: min(82px, 22vw);
+    height: min(82px, 22vw);
+    border-radius: 50%;
+    border: none;
+    font-size: 17px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(128, 128, 128, 0.2);
+    color: inherit;
+    padding: 0;
+    cursor: pointer;
+}
+
+.control-button:disabled {
+    background-color: rgba(50, 50, 50, 0.3);
+    color: #555;
+    cursor: default;
+    opacity: 0.7;
+}
+
+/* Button States */
+.control-button.start {
+    color: #3cd14b;
+    background-color: rgba(49, 164, 61, 0.3);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.control-button.start:active,
+.control-button.start:focus {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.control-button.stop {
+    background-color: rgba(255, 69, 58, 0.2);
+    color: #FF453A;
+}
+
+.control-button.reset-lap {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+.control-button.reset-lap:disabled {
+    opacity: 0.4;
+}
+
+/* Laps Container */
+.laps {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* padding: 0 15px; */
+    /* margin-top: 25px; */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    max-height: calc(100vh - 450px);
+    margin-bottom: auto;
+}
+
+.laps::-webkit-scrollbar {
+    display: none;
+}
+
+.lap-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 20px;
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.16);
+}
+
+.lap-entry:last-child {
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.16);
+}
+
+/* Time Display within Lap */
+.lap-time {
+    /* --- Use System Font Stack & Fix Shaking --- */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-variant-numeric: tabular-nums; /* Keep this! */
+    /* Add flex layout */
+    display: flex;
+    align-items: center;
+    /* --- Set Font Weight --- */
+    font-weight: 400; /* Make lap time thicker */
+    /* Restore font size */
+    font-size: 16px;
+    padding: 0;
+}
+
+/* Adjust separator style within lap time */
+.lap-time .colon,
+.lap-time .dot {
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+    font-weight: 300; /* Keep lap separators lighter */
+    /* Adjust vertical alignment if needed */
+     margin-bottom: 0.05em; /* Trial value for lap time separators */
+}
+
+/* Indicator Dots */
+.indicator-dots {
+    display: flex;
+    gap: 11px;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.indicator-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.dot-white {
+    background-color: white;
+}
+
+.dot-grey {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background-color: #000000;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    z-index: 1000;
+    height: 49px;
+    margin: 0;
+    gap: 40px; /* Add significant gap between items */
+    max-width: 400px; /* Limit the width to keep icons from spreading too far */
+    left: 50%;
+    transform: translateX(-50%); /* Center the nav container */
+}
+
+/* Nav Item */
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #8E8E93;
+    padding: 8px 0;
+    min-width: 60px;
+    position: relative;
+}
+
+.nav-item.active {
+    color: #FF9500;
+}
+
+/* Icon container */
+span[id^="icon-"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.nav-icon {
+    background-color: currentColor;
+    -webkit-mask-image: var(--icon-url);
+    mask-image: var(--icon-url);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+#icon-world-clock {
+    width: var(--icon-size-world-clock);
+    height: var(--icon-size-world-clock);
+    transform: translateY(var(--icon-offset-world-clock));
+}
+
+#icon-alarms {
+    width: var(--icon-size-alarms);
+    height: var(--icon-size-alarms);
+    transform: translateY(var(--icon-offset-alarms));
+}
+
+#icon-stopwatch {
+    width: var(--icon-size-stopwatch);
+    height: var(--icon-size-stopwatch);
+    transform: translateY(var(--icon-offset-stopwatch));
+}
+
+#icon-timers {
+    width: var(--icon-size-timers);
+    height: var(--icon-size-timers);
+    transform: translateY(var(--icon-offset-timers));
+}
+
+.nav-label {
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* Individual icon containers */
+:root {
+    /* Default values */
+    --icon-size-world-clock: 21px;
+    --icon-size-alarms: 28px;
+    --icon-size-stopwatch: 25px;
+    --icon-size-timers: 25px;
+    
+    --icon-offset-world-clock: -3px;
+    --icon-offset-alarms: 1px;
+    --icon-offset-stopwatch: 0px;
+    --icon-offset-timers: 0px;
+}
+
+@supports (padding: max(0px)) {
+    .bottom-nav {
+        height: calc(49px + env(safe-area-inset-bottom));
     }
-  ]
+}
+
+/* PWA Status Bar */
+@media all and (display-mode: standalone) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    .stopwatch-container {
+        padding-top: max(16px, env(safe-area-inset-top));
+    }
+    
+    .bottom-nav {
+        padding-bottom: env(safe-area-inset-bottom);
+        height: calc(49px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Landscape Orientation Adjustments */
+@media screen and (orientation: landscape) {
+    .time-display {
+        margin-top: min(15vh, 80px);
+        font-size: clamp(3.8rem, 17vw, 6rem);
+    }
+    
+    .controls {
+        margin-top: min(6vh, 35px);
+    }
+    
+    .control-button {
+        width: min(72px, 19vw);
+        height: min(72px, 19vw);
+    }
+
+    .bottom-nav {
+        height: calc(40px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Safe Area Adjustments for iOS */
+@supports (padding: max(0px)) {
+    .bottom-nav {
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+    }
 }
