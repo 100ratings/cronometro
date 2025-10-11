@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateDisplay(displayTime) {
         const parts = getTimeParts(displayTime);
-        const newHTML = `<span class="time-part minutes">${parts.minutes}</span><span class="time-part colon">:</span><span class="time-part seconds">${parts.seconds}</span><span class="time-part comma">.</span><span class="time-part hundredths">${parts.hundredths}</span>`;
+        // ÚNICA MUDANÇA: de "." para ","
+        const newHTML = `<span class="time-part minutes">${parts.minutes}</span><span class="time-part colon">:</span><span class="time-part seconds">${parts.seconds}</span><span class="time-part comma">,</span><span class="time-part hundredths">${parts.hundredths}</span>`;
         timeDisplay.innerHTML = newHTML;
 
         // Atualiza a “Volta 1” se visível
@@ -171,5 +172,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 }); // End DOMContentLoaded
-
-
