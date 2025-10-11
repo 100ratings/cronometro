@@ -1,7 +1,6 @@
 {
-  "name": "Cronômetro",
-  "short_name": "Cronômetro",
-  "lang": "pt-BR",
+  "name": "Clock",
+  "short_name": "Clock", 
   "start_url": "./index.html",
   "display": "fullscreen",
   "orientation": "portrait",
