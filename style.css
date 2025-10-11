@@ -75,10 +75,8 @@ body {
 .dot {
     margin-left: 0.035em;
     margin-right: 0.04em;
-    /* Adjust bottom margin if needed for perfect vertical alignment */
-    margin-bottom: 0.17em; /* User specified margin */
-     /* Keep separators light */
-    font-weight: 100; /* Match main display weight */
+    margin-bottom: 0.17em;
+    font-weight: 100;
 }
 
 /* Controls (Buttons) */
@@ -123,23 +121,19 @@ body {
     -webkit-tap-highlight-color: transparent;
     outline: none;
 }
-
 .control-button.start:active,
 .control-button.start:focus {
     outline: none;
     -webkit-tap-highlight-color: transparent;
 }
-
 .control-button.stop {
     background-color: rgba(255, 69, 58, 0.2);
     color: #FF453A;
 }
-
 .control-button.reset-lap {
     background-color: rgba(255, 255, 255, 0.3);
     color: #ffffff;
 }
-
 .control-button.reset-lap:disabled {
     opacity: 0.4;
 }
@@ -149,14 +143,11 @@ body {
     flex: 1;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    /* padding: 0 15px; */
-    /* margin-top: 25px; */
     scrollbar-width: none;
     -ms-overflow-style: none;
     max-height: calc(100vh - 450px);
     margin-bottom: auto;
 }
-
 .laps::-webkit-scrollbar {
     display: none;
 }
@@ -170,34 +161,26 @@ body {
     color: #fff;
     border-top: 0.5px solid rgba(255, 255, 255, 0.16);
 }
-
 .lap-entry:last-child {
     border-bottom: 0.5px solid rgba(255, 255, 255, 0.16);
 }
 
 /* Time Display within Lap */
 .lap-time {
-    /* --- Use System Font Stack & Fix Shaking --- */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-variant-numeric: tabular-nums; /* Keep this! */
-    /* Add flex layout */
+    font-variant-numeric: tabular-nums;
     display: flex;
     align-items: center;
-    /* --- Set Font Weight --- */
-    font-weight: 400; /* Make lap time thicker */
-    /* Restore font size */
+    font-weight: 400;
     font-size: 16px;
     padding: 0;
 }
-
-/* Adjust separator style within lap time */
 .lap-time .colon,
 .lap-time .dot {
     margin-left: 0.1em;
     margin-right: 0.1em;
-    font-weight: 300; /* Keep lap separators lighter */
-    /* Adjust vertical alignment if needed */
-     margin-bottom: 0.05em; /* Trial value for lap time separators */
+    font-weight: 300;
+    margin-bottom: 0.05em;
 }
 
 /* Indicator Dots */
@@ -209,20 +192,19 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
-
 .indicator-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
+    opacity: .35;
+    transition: transform .18s, opacity .18s;
 }
-
-.dot-white {
-    background-color: white;
+.indicator-dot.active {
+    opacity: 1;
+    transform: scale(1.15);
 }
-
-.dot-grey {
-    background-color: rgba(255, 255, 255, 0.3);
-}
+.dot-white { background-color: #fff; }
+.dot-grey  { background-color: rgba(255, 255, 255, 0.3); }
 
 /* Bottom Navigation */
 .bottom-nav {
@@ -237,10 +219,10 @@ body {
     z-index: 1000;
     height: 49px;
     margin: 0;
-    gap: 40px; /* Add significant gap between items */
-    max-width: 400px; /* Limit the width to keep icons from spreading too far */
+    gap: 40px;
+    max-width: 400px;
     left: 50%;
-    transform: translateX(-50%); /* Center the nav container */
+    transform: translateX(-50%);
 }
 
 /* Nav Item */
@@ -254,7 +236,6 @@ body {
     min-width: 60px;
     position: relative;
 }
-
 .nav-item.active {
     color: #FF9500;
 }
@@ -269,16 +250,17 @@ span[id^="icon-"] {
     margin-bottom: 2px;
 }
 
+/* ICONS — robusto para URL externa via CSS var */
 .nav-icon {
     background-color: currentColor;
-    -webkit-mask-image: var(--icon-url);
-    mask-image: var(--icon-url);
+    -webkit-mask-image: url(var(--icon-url));
+            mask-image: url(var(--icon-url));
     -webkit-mask-size: contain;
-    mask-size: contain;
+            mask-size: contain;
     -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
     -webkit-mask-position: center;
-    mask-position: center;
+            mask-position: center;
 }
 
 #icon-world-clock {
@@ -286,19 +268,16 @@ span[id^="icon-"] {
     height: var(--icon-size-world-clock);
     transform: translateY(var(--icon-offset-world-clock));
 }
-
 #icon-alarms {
     width: var(--icon-size-alarms);
     height: var(--icon-size-alarms);
     transform: translateY(var(--icon-offset-alarms));
 }
-
 #icon-stopwatch {
     width: var(--icon-size-stopwatch);
     height: var(--icon-size-stopwatch);
     transform: translateY(var(--icon-offset-stopwatch));
 }
-
 #icon-timers {
     width: var(--icon-size-timers);
     height: var(--icon-size-timers);
@@ -313,12 +292,11 @@ span[id^="icon-"] {
 
 /* Individual icon containers */
 :root {
-    /* Default values */
     --icon-size-world-clock: 21px;
     --icon-size-alarms: 28px;
     --icon-size-stopwatch: 25px;
     --icon-size-timers: 25px;
-    
+
     --icon-offset-world-clock: -3px;
     --icon-offset-alarms: 1px;
     --icon-offset-stopwatch: 0px;
@@ -337,11 +315,9 @@ span[id^="icon-"] {
         padding-top: env(safe-area-inset-top);
         padding-bottom: env(safe-area-inset-bottom);
     }
-    
     .stopwatch-container {
         padding-top: max(16px, env(safe-area-inset-top));
     }
-    
     .bottom-nav {
         padding-bottom: env(safe-area-inset-bottom);
         height: calc(49px + env(safe-area-inset-bottom));
@@ -354,16 +330,13 @@ span[id^="icon-"] {
         margin-top: min(15vh, 80px);
         font-size: clamp(3.8rem, 17vw, 6rem);
     }
-    
     .controls {
         margin-top: min(6vh, 35px);
     }
-    
     .control-button {
         width: min(72px, 19vw);
         height: min(72px, 19vw);
     }
-
     .bottom-nav {
         height: calc(40px + env(safe-area-inset-bottom));
     }
