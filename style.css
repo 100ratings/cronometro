@@ -72,7 +72,7 @@ body {
 
 /* Style the separators specifically */
 .colon,
-.dot {
+.comma {
     margin-left: 0.035em;
     margin-right: 0.04em;
     margin-bottom: 0.17em;
@@ -350,4 +350,5 @@ span[id^="icon-"] {
         padding-right: max(15px, env(safe-area-inset-right));
     }
 }
+
 
