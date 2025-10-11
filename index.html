@@ -9,10 +9,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <title>Cronômetro</title>
+
     <link rel="stylesheet" href="./style.css">
     <link rel="manifest" href="./manifest.json">
 
-    <!-- Aqui estão os URLs absolutos -->
+    <!-- Ícones externos -->
     <link rel="apple-touch-icon" href="https://rostamimagic.com/sw2/icons/icon-192x192.png">
     <link rel="apple-touch-startup-image" href="https://rostamimagic.com/sw2/icons/icon-512x512.png">
 </head>
@@ -31,7 +32,8 @@
             <button id="startStopBtn" class="control-button start">Iniciar</button>
         </div>
 
-        <div class="laps">
+        <!-- Evita flash da área de voltas -->
+        <div class="laps" style="display:none;">
             <div class="lap-entry current-lap">
                 <span>Volta 1</span>
                 <span class="lap-time" id="lapTimeDisplay"></span>
@@ -39,28 +41,25 @@
         </div>
     </div>
 
-<nav class="bottom-nav">
-  <a href="#" class="nav-item">
-    <span class="nav-icon" id="icon-world-clock" style="--icon-url: url('https://rostamimagic.com/sw2/icons/world-clock.svg');"></span>
-    <span class="nav-label">Relógio</span>
-  </a>
-  <a href="#" class="nav-item">
-    <span class="nav-icon" id="icon-alarms" style="--icon-url: url('https://rostamimagic.com/sw2/icons/alarms.svg');"></span>
-    <span class="nav-label">Alarmes</span>
-  </a>
-  <a href="#" class="nav-item active">
-    <span class="nav-icon" id="icon-stopwatch" style="--icon-url: url('https://rostamimagic.com/sw2/icons/stopwatch-icon.svg');"></span>
-    <span class="nav-label">Cronômetro</span>
-  </a>
-  <a href="#" class="nav-item">
-    <span class="nav-icon" id="icon-timers" style="--icon-url: url('https://rostamimagic.com/sw2/icons/timers.svg');"></span>
-    <span class="nav-label">Timers</span>
-  </a>
-</nav>
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item">
+            <span class="nav-icon" id="icon-world-clock" style="--icon-url: https://rostamimagic.com/sw2/icons/world-clock.svg;"></span>
+            <span class="nav-label">Relógio</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon" id="icon-alarms" style="--icon-url: https://rostamimagic.com/sw2/icons/alarms.svg;"></span>
+            <span class="nav-label">Alarmes</span>
+        </a>
+        <a href="#" class="nav-item active">
+            <span class="nav-icon" id="icon-stopwatch" style="--icon-url: https://rostamimagic.com/sw2/icons/stopwatch-icon.svg;"></span>
+            <span class="nav-label">Cronômetro</span>
+        </a>
+        <a href="#" class="nav-item">
+            <span class="nav-icon" id="icon-timers" style="--icon-url: https://rostamimagic.com/sw2/icons/timers.svg;"></span>
+            <span class="nav-label">Timerss</span>
+        </a>
+    </nav>
 
     <script src="./script.js"></script>
 </body>
 </html>
-
-
-
