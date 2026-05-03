@@ -13,6 +13,14 @@ html {
     height: -webkit-fill-available;
     overflow: hidden;
     background-color: #000;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -36,6 +44,7 @@ body {
     top: 0;
     right: 0;
     bottom: 0;
+    -webkit-app-region: no-drag;
 }
 
 /* Main Stopwatch Container */
@@ -311,9 +320,13 @@ span[id^="icon-"] {
 
 /* PWA Status Bar */
 @media all and (display-mode: standalone) {
+    html {
+        background-color: #000;
+    }
     body {
         padding-top: env(safe-area-inset-top);
         padding-bottom: env(safe-area-inset-bottom);
+        background-color: #000;
     }
     .stopwatch-container {
         padding-top: max(16px, env(safe-area-inset-top));
@@ -348,6 +361,13 @@ span[id^="icon-"] {
         padding-bottom: max(0px, env(safe-area-inset-bottom));
         padding-left: max(15px, env(safe-area-inset-left));
         padding-right: max(15px, env(safe-area-inset-right));
+    }
+}
+
+/* Anti-Flash Optimization */
+@supports (padding: env(safe-area-inset-top)) {
+    html, body {
+        background-color: #000 !important;
     }
 }
 
