@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Cronômetro">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>Cronômetro</title>
+
+    <style>html,body{background:#000!important}</style>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- Ícones externos para iOS / splash -->
+    <link rel="apple-touch-icon" href="https://rostamimagic.com/sw2/icons/icon-192x192.png">
+    <link rel="apple-touch-startup-image" href="https://rostamimagic.com/sw2/icons/icon-512x512.png">
+</head>
+<body>
+    <div class="stopwatch-container">
+        <div class="time-display" id="timeDisplay">00:00,00</div>
+
+        <div class="controls">
+            <button id="resetLapBtn" class="control-button reset-lap" disabled>Volta</button>
+
+            <div class="indicator-dots">
+                <span class="indicator-dot dot-white"></span>
+                <span class="indicator-dot dot-grey"></span>
+            </div>
+
+            <button id="startStopBtn" class="control-button start">Iniciar</button>
+        </div>
+
+        <!-- Evita flash da área de voltas -->
+        <div class="laps" style="display:none;">
+            <div class="lap-entry current-lap">
+                <span>Volta 1</span>
+                <span class="lap-time" id="lapTimeDisplay"></span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item">
+        <span class="nav-icon" id="icon-world-clock"
+              style="--icon-mask: url('./icons/world-clock.svg');"></span>
+        <span class="nav-label">Relógio</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon" id="icon-alarms"
+              style="--icon-mask: url('./icons/alarms.svg');"></span>
+        <span class="nav-label">Alarmes</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <span class="nav-icon" id="icon-stopwatch"
+              style="--icon-mask: url('./icons/stopwatch-icon.svg');"></span>
+        <span class="nav-label">Cronômetro</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon" id="icon-timers"
+              style="--icon-mask: url('./icons/timers.svg');"></span>
+        <span class="nav-label">Timers</span>
+      </a>
+    </nav>
+
+    <script src="./script.js"></script>
+</body>
+</html>
+
+
