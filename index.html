@@ -3,23 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Cronômetro">
     <meta name="theme-color" content="#000000">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Cronômetro</title>
 
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            overflow: hidden;
-        }
+        html, body { background-color: #000 !important; }
     </style>
     <link rel="stylesheet" href="./style.css">
     <link rel="manifest" href="./manifest.json">
@@ -76,8 +68,7 @@
     </nav>
 
     <script>
-        // Força o status bar a ficar oculto desde o início
-        if (navigator.standalone === true) {
+        if (window.navigator.standalone) {
             document.documentElement.style.backgroundColor = '#000';
             document.body.style.backgroundColor = '#000';
         }
