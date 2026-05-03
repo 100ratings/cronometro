@@ -11,11 +11,16 @@
     <title>Cronômetro</title>
 
     <style>
+        /* Correção de Flash: Fundo preto instantâneo */
         html, body { background-color: #000 !important; }
-        /* Compensação cirúrgica: black-translucent empurra o layout para cima em alguns dispositivos, 
-           este ajuste garante que o container principal mantenha a posição original. */
-        .stopwatch-container { padding-top: env(safe-area-inset-top) !important; }
+        
+        /* Correção de Layout: O modo black-translucent remove o padding automático do sistema.
+           Mantemos o padding-top original do seu container para que nada se mova. */
+        .stopwatch-container {
+            padding-top: max(16px, env(safe-area-inset-top)) !important;
+        }
     </style>
+
     <link rel="stylesheet" href="./style.css">
     <link rel="manifest" href="./manifest.json">
 
@@ -73,5 +78,3 @@
     <script src="./script.js"></script>
 </body>
 </html>
-
-
